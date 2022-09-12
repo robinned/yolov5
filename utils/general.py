@@ -57,10 +57,15 @@ os.environ['NUMEXPR_MAX_THREADS'] = str(NUM_THREADS)  # NumExpr max threads
 os.environ['OMP_NUM_THREADS'] = '1' if platform.system() == 'darwin' else str(NUM_THREADS)  # OpenMP (PyTorch and SciPy)
 
 
-def validate_hyp_str(s):
-    # Is the string of the format a=b where a and b are any string not containing '='
+def interpret_hyp_str(s):
+    # Raise a type error if s is not of the format a=b where a is any string not containing '=', and
+    #   b is any number (possibly with a decimal point)
+    # Returns a dictionary with one key/value
     # (Used for validating hyperparameters passed directly to train.py)
-    return re.fullmatch('[^=]+=[^=]+', s) is not None
+    if re.fullmatch('[^=]+=[0-9.]+', s) is None: 
+        raise TypeError
+    split_string = s.split('=')
+    return {split_string[0] : float(split_string[1])}
 
 def is_ascii(s=''):
     # Is string composed of all ASCII (no UTF) characters? (note str().isascii() introduced in python 3.7)
