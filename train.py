@@ -50,7 +50,7 @@ from utils.downloads import attempt_download, is_url
 from utils.general import (LOGGER, check_amp, check_dataset, check_file, check_git_status, check_img_size,
                            check_requirements, check_suffix, check_yaml, colorstr, get_latest_run, increment_path,
                            init_seeds, intersect_dicts, labels_to_class_weights, labels_to_image_weights, methods,
-                           one_cycle, print_args, print_mutation, strip_optimizer, yaml_save)
+                           one_cycle, print_args, print_mutation, strip_optimizer, yaml_save, interpret_hyp_str)
 from utils.loggers import Loggers
 from utils.loggers.comet.comet_utils import check_comet_resume
 from utils.loggers.wandb.wandb_utils import check_wandb_resume
@@ -465,6 +465,7 @@ def parse_opt(known=False):
     parser.add_argument('--save-period', type=int, default=-1, help='Save checkpoint every x epochs (disabled if < 1)')
     parser.add_argument('--seed', type=int, default=0, help='Global training seed')
     parser.add_argument('--local_rank', type=int, default=-1, help='Automatic DDP Multi-GPU argument, do not modify')
+    parser.add_argument('--hyp-list', nargs='+', type=interpret_hyp_str, help="List of hyperparameters in the format of 'hyperparameter=value'. Overrides --hyp")
 
     # Logger arguments
     parser.add_argument('--entity', default=None, help='Entity')
